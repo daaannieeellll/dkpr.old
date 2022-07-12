@@ -9,7 +9,7 @@ const Home = () => (
 
     <main className="flex w-full flex-1 flex-col items-center justify-evenly px-20 text-center h-150">
       <h1 className="text-6xl font-bold">
-        Welcome to <Link href="/">dkpr.nl</Link>
+        Welcome to <Link href="/">dkpr</Link>
       </h1>
       <Link href="/auth/login" className="text-6xl">
         Log in!
