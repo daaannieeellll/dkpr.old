@@ -1,5 +1,5 @@
 interface ShortUrl {
   created: number;
   lastVisited: number;
-  longUrl: string;
+  destination: string;
 }

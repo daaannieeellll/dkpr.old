@@ -7,16 +7,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const data: ShortUrl | null = await (
     await db.ref(shortUrl).once("value")
   ).val();
+  const destination = data?.destination;
 
-  const longUrl = data?.longUrl;
-  return !longUrl
-    ? { notFound: true }
-    : {
-        redirect: {
-          destination: longUrl,
-          permanent: false,
-        },
-      };
+  if (!destination) return { notFound: true };
+
+  const lastVisited = new Date().getTime();
+
+  return {
+    redirect: {
+      destination,
+      permanent: false,
+    },
+  };
 };
 
 export default function Redirect() {}

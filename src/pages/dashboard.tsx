@@ -1,47 +1,79 @@
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { ProtectRoute } from "../contexts/auth";
 
-import { ref, set } from "firebase/database";
+import { onValue, ref, set } from "firebase/database";
 import { db } from "../../firebase";
+import { makeAbsolute } from "../utils/urls";
+import Alias from "../components/alias";
 
 const Dashboard = () => {
-  const [shortUrl, setShortUrl] = useState("");
-  const [longUrl, setLongUrl] = useState("");
+  const [newShortUrl, setNewShortUrl] = useState("");
+  const [newLongUrl, setNewLongUrl] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const created = new Date().getTime() / 1000;
+
+    const created = new Date().getTime();
+    const destination = makeAbsolute(newLongUrl);
     const lastVisited = -1;
-    set(ref(db, shortUrl), { longUrl, created, lastVisited }).then(() => {
-      console.log("success!");
-    });
+
+    //
+    setLoading(true);
+    set(ref(db, newShortUrl), { destination, created, lastVisited })
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
   };
+
+  const [shortUrls, setShortUrls] = useState({});
+  useEffect(() => {
+    setShortUrls({});
+    onValue(ref(db), (snapshot) => {
+      if (snapshot.val()) {
+        setShortUrls(snapshot.val());
+      }
+    });
+  }, []);
 
   return (
     <ProtectRoute>
       <Link href="auth/logout">Logout</Link>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="bg-slate-200">
         <div>
-          <label>Short url</label>
+          <label>Alias</label>
           <input
             type="text"
             onChange={(e) => {
-              setShortUrl(e.target.value);
+              setNewShortUrl(e.target.value);
             }}
           />
         </div>
         <div>
-          <label>Long url</label>
+          <label>Destination</label>
           <input
             type="text"
             onChange={(e) => {
-              setLongUrl(e.target.value);
+              setNewLongUrl(e.target.value);
             }}
           />
         </div>
         <button type="submit">Add</button>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error}</p>}
       </form>
+      <div className="bg-slate-300">
+        {Object.entries<ShortUrl>(shortUrls).map(([alias, shortUrl]) => (
+          <Alias key={alias} alias={alias} shortUrl={shortUrl} />
+        ))}
+      </div>
     </ProtectRoute>
   );
 };
