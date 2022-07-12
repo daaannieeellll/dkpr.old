@@ -1,5 +1,6 @@
 interface ShortUrl {
-  created: number;
-  lastVisited: number;
+  clicks: number;
+  createdAt: number;
   destination: string;
+  name?: string;
 }
