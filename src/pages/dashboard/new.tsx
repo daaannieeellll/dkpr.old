@@ -10,7 +10,7 @@ const NewAlias = () => {
     flex justify-center items-center"
     >
       <FormNewAlias />
-      <Link href="dashboard">
+      <Link href="/dashboard">
         <a className="absolute top-0 right-0">Back</a>
       </Link>
     </div>
