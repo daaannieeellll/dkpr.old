@@ -20,7 +20,10 @@ const AliasListItem = ({ alias, shortUrl }: IListItem) => {
   const creationDate = toDateString(new Date(createdAt));
 
   return (
-    <div className="relative flex-col p-5 text-sm text-gray-500">
+    <div
+      className="relative flex-col p-5
+    text-sm text-gray-500"
+    >
       <p className="font-light">{creationDate}</p>
       <Link href={destination} className="">
         <a className="inline-block w-full overflow-hidden whitespace-nowrap text-ellipsis">
@@ -34,7 +37,7 @@ const AliasListItem = ({ alias, shortUrl }: IListItem) => {
             <span className="font-bold">{alias}</span>
           </a>
         </Link>
-        <div className="relative inline-flex items-center px-2 py-2 text-gray-500">
+        <div className="relative inline-flex items-center px-2 text-gray-500 :">
           <span>{clicks}</span>
           <ChartBarIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
         </div>
