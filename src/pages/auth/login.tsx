@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
     login(email, password).then(() => {
       const { next } = router.query;
-      router.push(next?.toString() || "/");
+      router.push(next?.toString() || "/dashboard");
     });
   };
 

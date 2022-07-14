@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPageContext } from "next";
+import { GetServerSideProps } from "next";
 import { db } from "../../firebase-admin";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
